@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-sudo apt update
-sudo apt upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
-sudo apt install -y libusb-1.0-0-dev make unzip wget
+sudo apt-get install -y libusb-1.0-0-dev make unzip wget
 
 cd $HOME
 
