@@ -18,7 +18,6 @@ sed -i 's/libusb_set_debug(ctx, 3);/libusb_set_option(ctx, LIBUSB_OPTION_LOG_LEV
 
 sudo make
 sudo make install
-mv bto_advanced_USBIR_cmd-1.0.1 $HOME
 
 cd $HOME
 
