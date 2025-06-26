@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import InfraredSignal
+import json
 import subprocess
 from pathlib import Path
 
 def index(request):
-    return render(request, 'webapp/index.html')
+    signals = InfraredSignal.objects.all()
+    return render(request, 'webapp/index.html', {'signals': signals})
 
 def register_ir(request):
     if request.method == 'POST':
@@ -24,3 +26,14 @@ def register_ir(request):
             return JsonResponse({'status': 'ok'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
+
+def send_ir(request):
+    try:
+        data = json.loads(request.body)
+        ir = InfraredSignal.objects.get(id=data['id'])
+
+        subprocess.run(['bto_advanced_USBIR_cmd', '-t', ir.content], check=True)
+
+        return JsonResponse({'status': 'ok'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})

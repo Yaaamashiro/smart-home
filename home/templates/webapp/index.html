@@ -1,87 +1,35 @@
-<button id="btn-register-ir">赤外線登録</button>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>赤外線リモコン</title>
+    <link rel="stylesheet" href="{% static 'webapp/style.css' %}" />
+    <script src="{% static 'webapp/script.js' %}" defer></script>
+  </head>
+  <body>
+    <form method="post" style="display: none">{% csrf_token %}</form>
 
-<div id="ir-modal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <input id="ir-name" placeholder="IR信号名" />
-    <button id="ir-recv-btn">受信して登録</button>
-  </div>
-</div>
+    <button id="btn-register-ir">赤外線登録</button>
 
-<style>
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
+    <div id="ir-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <input id="ir-name" placeholder="IR信号名" />
+        <button id="ir-recv-btn">受信して登録</button>
+      </div>
+    </div>
 
-  .modal-content {
-    background-color: white;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
-    text-align: center;
-  }
-
-  .close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  input {
-    width: 90%;
-    margin-bottom: 10px;
-  }
-
-  button {
-    padding: 6px 12px;
-  }
-</style>
-
-<script>
-  const modal = document.getElementById("ir-modal");
-  const closeBtn = document.querySelector(".close");
-
-  document.getElementById("btn-register-ir").onclick = () => {
-    modal.style.display = "block";
-  };
-
-  closeBtn.onclick = () => {
-    modal.style.display = "none";
-  };
-
-  window.onclick = (event) => {
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-  };
-
-  document.getElementById("ir-recv-btn").onclick = () => {
-    const name = document.getElementById("ir-name").value;
-    fetch("/register_ir/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "X-CSRFToken": "{{ csrf_token }}",
-      },
-      body: `name=${encodeURIComponent(name)}`,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        alert(data.status === "ok" ? "登録成功！" : `失敗：${data.message}`);
-        if (data.status === "ok") modal.style.display = "none";
-      });
-  };
-</script>
+    <h3>登録済み赤外線信号一覧</h3>
+    <ul id="signal-list">
+      {% for signal in signals %}
+      <li>
+        {{ signal.name }}
+        <button class="send-btn" data-id="{{ signal.id }}">送信</button>
+      </li>
+      {% empty %}
+      <li>登録済みの信号はありません。</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

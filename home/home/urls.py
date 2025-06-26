@@ -21,5 +21,6 @@ from webapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('register_ir/', views.register_ir, name='register_ir')
+    path('register_ir/', views.register_ir, name='register_ir'),
+    path('send_ir/', views.send_ir, name='send_ir')
 ]
