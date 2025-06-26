@@ -10,11 +10,11 @@ services:
     volumes:
       - data:/var/lib/postgresql/data
     env_file:
-      - .env
+      - ./home/.env
 
-  django:
-    build: .
-    container_name: django
+  home:
+    build: ./home
+    container_name: home
     ports:
       - "8000:8000"
     depends_on:
@@ -33,7 +33,7 @@ services:
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
     env_file:
-      - .env
+      - ./home/.env
 
 volumes:
   data:
