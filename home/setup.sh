@@ -5,7 +5,7 @@ cd $HOME
 
 sudo apt-get update
 sudo apt-get upgrade -y
-sudo apt-get install -y build-essential ca-certificates dphys-swapfile libusb-1.0-0-dev make unzip wget
+sudo apt-get install -y ca-certificates dphys-swapfile
 
 # create swap space
 sudo sed -i 's/^CONF_SWAPSIZE=.*/CONF_SWAPSIZE=1024/' /etc/dphys-swapfile || echo 'CONF_SWAPSIZE=1024' | sudo tee -a /etc/dphys-swapfile
@@ -14,22 +14,6 @@ sudo dphys-swapfile setup
 sudo dphys-swapfile swapon
 
 echo "✅ swap space created!"
-
-# install bto_advanced_USBIR_cmd
-wget -N https://bit-trade-one.co.jp/wp/wp-content/uploads/mydownloads/bto_advanced_USBIR_cmd101.zip
-rm -rf bto_advanced_USBIR_cmd-1.0.1
-unzip bto_advanced_USBIR_cmd101.zip
-rm bto_advanced_USBIR_cmd101.zip
-cd bto_advanced_USBIR_cmd-1.0.1
-
-sed -i 's/libusb_set_debug(ctx, 3);/libusb_set_option(ctx, LIBUSB_OPTION_LOG_LEVEL, 3);/' bto_advanced_USBIR_cmd.c
-
-sudo make
-sudo make install
-
-cd $HOME
-
-echo "✅ bto_advanced_USBIR_cmd installed!"
 
 # created .env
 sudo touch .env
