@@ -9,7 +9,8 @@
 # Home の初期設定
 
 ```
-curl https://raw.githubusercontent.com/Yaaamashiro/smart-home/refs/heads/main/home/setup.sh | bash
+curl -o setup.sh https://raw.githubusercontent.com/Yaaamashiro/smart-home/refs/heads/main/home/setup.sh
+bash setup.sh
 ```
 
 # 参考文献

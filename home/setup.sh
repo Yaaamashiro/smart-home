@@ -5,7 +5,15 @@ cd $HOME
 
 sudo apt-get update
 sudo apt-get upgrade -y
-sudo apt-get install -y build-essential ca-certificates libusb-1.0-0-dev make unzip wget
+sudo apt-get install -y build-essential ca-certificates dphys-swapfile libusb-1.0-0-dev make unzip wget
+
+# create swap space
+sudo sed -i 's/^CONF_SWAPSIZE=.*/CONF_SWAPSIZE=1024/' /etc/dphys-swapfile || echo 'CONF_SWAPSIZE=1024' | sudo tee -a /etc/dphys-swapfile
+
+sudo dphys-swapfile setup
+sudo dphys-swapfile swapon
+
+echo "✅ swap space created!"
 
 # install bto_advanced_USBIR_cmd
 wget -N https://bit-trade-one.co.jp/wp/wp-content/uploads/mydownloads/bto_advanced_USBIR_cmd101.zip
@@ -19,9 +27,9 @@ sed -i 's/libusb_set_debug(ctx, 3);/libusb_set_option(ctx, LIBUSB_OPTION_LOG_LEV
 sudo make
 sudo make install
 
-echo "✅ bto_advanced_USBIR_cmd installed!"
-
 cd $HOME
+
+echo "✅ bto_advanced_USBIR_cmd installed!"
 
 # created .env
 sudo touch .env
@@ -65,16 +73,15 @@ rm -rf smart-home
 
 sudo docker compose up --build -d
 sudo docker compose exec django python manage.py migrate --noinput
-sudo docker compose exec django python manage.py collectstatic --noinput
 
 sudo docker compose exec django python manage.py shell -c "
-  from django.contrib.auth import get_user_model;
-  User = get_user_model();
-  User.objects.create_superuser('$username', '', '$password')
+from django.contrib.auth import get_user_model;
+User = get_user_model();
+User.objects.create_superuser('$username', '', '$password')
 "
 
 echo "✅ docker container built!"
 
-echo "✅ Successful setup!"
+echo "💯 Successful setup!"
 
 rm "$0"
