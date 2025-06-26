@@ -24,6 +24,8 @@ echo "✅ bto_advanced_USBIR_cmd installed!"
 cd $HOME
 
 # created .env
+sudo touch .env
+sudo chown "$USER":"$USER" .env
 read -p "Enter USERNAME: " username
 read -s -p "Enter PASSWORD: " password
 echo
