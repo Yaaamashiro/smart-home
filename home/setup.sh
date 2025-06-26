@@ -76,3 +76,5 @@ sudo docker compose exec django python manage.py shell -c "
 echo "✅ docker container built!"
 
 echo "✅ Successful setup!"
+
+rm "$0"
