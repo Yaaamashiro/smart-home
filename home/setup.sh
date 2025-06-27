@@ -1,13 +1,14 @@
 #!/bin/bash
 set -e
 
+cd $HOME
+
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y ca-certificates dphys-swapfile
 
 rm -rf smart-home
 git clone https://github.com/Yaaamashiro/smart-home.git
-cd smart-home/home
 
 # create swap space
 sudo sed -i 's/^CONF_SWAPSIZE=.*/CONF_SWAPSIZE=1024/' /etc/dphys-swapfile || echo 'CONF_SWAPSIZE=1024' | sudo tee -a /etc/dphys-swapfile
@@ -18,6 +19,8 @@ sudo dphys-swapfile swapon
 echo "✅ swap space created!"
 
 # created .env
+cd smart-home
+
 sudo touch .env
 sudo chown "$USER":"$USER" .env
 read -p "DEBUG? (True or False): " debug
@@ -29,12 +32,12 @@ cat <<EOF > .env
 DEBUG=$debug
 DJANGO_SECRET_KEY=$password
 DJANGO_LOGLEVEL=info
-DJANGO_ALLOWED_HOSTS=home
+DJANGO_ALLOWED_HOSTS=home-app
 DATABASE_ENGINE=postgresql_psycopg2
 DATABASE_NAME=postgre
 DATABASE_USERNAME=$username
 DATABASE_PASSWORD=$password
-DATABASE_HOST=db
+DATABASE_HOST=home-db
 DATABASE_PORT=5432
 EOF
 
@@ -53,11 +56,10 @@ echo \
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-cd $HOME/smart-home
-sudo docker compose up --build -d
-sudo docker compose exec home python manage.py migrate --noinput
+sudo docker compose up home-db home-app --build -d
+sudo docker compose exec home-app python manage.py migrate
 
-sudo docker compose exec home python manage.py shell -c "
+sudo docker compose exec home-app python manage.py shell -c "
 from django.contrib.auth import get_user_model;
 User = get_user_model();
 User.objects.create_superuser('$username', '', '$password')

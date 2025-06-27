@@ -1,24 +1,25 @@
 services:
-  db:
+  home-db:
     image: postgres:17
-    environment:
-      POSTGRES_DB: ${DATABASE_NAME}
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    container_name: home-db
     ports:
       - "5432:5432"
     volumes:
       - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     env_file:
-      - ./home/.env
+      - .env
 
-  home:
+  home-app:
     build: ./home
-    container_name: home
+    container_name: home-app
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - home-db
     devices:
       - "/dev/bus/usb:/dev/bus/usb"
     environment:
@@ -33,7 +34,7 @@ services:
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
     env_file:
-      - ./home/.env
+      - .env
 
 volumes:
   data:
