@@ -32,7 +32,7 @@ cat <<EOF > .env
 DEBUG=$debug
 DJANGO_SECRET_KEY=$password
 DJANGO_LOGLEVEL=info
-DJANGO_ALLOWED_HOSTS=home-app
+DJANGO_ALLOWED_HOSTS=home
 DATABASE_ENGINE=postgresql_psycopg2
 DATABASE_NAME=postgre
 DATABASE_USERNAME=$username
