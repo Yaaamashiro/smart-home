@@ -58,12 +58,14 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 
 sudo docker compose up home-db home-app --build -d
 sudo docker compose exec home-app python manage.py migrate
-sudo docker compose exec home-app python manage.py collectstatic
+sudo docker compose exec home-app python manage.py collectstatic --noinput
 
 sudo docker compose exec home-app python manage.py shell -c "
 from django.contrib.auth import get_user_model;
 User = get_user_model();
-User.objects.create_superuser('$username', '', '$password')
+username = '$username';
+if not User.objects.filter(username=username).exists():
+    User.objects.create_superuser(username, '', '$password')
 "
 
 echo "✅ docker container built!"

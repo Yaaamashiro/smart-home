@@ -2,27 +2,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("ir-modal");
   const closeBtn = document.querySelector(".close");
 
-  // 「IR登録」ボタンでモーダル表示
   document.getElementById("btn-register-ir").onclick = () => {
     modal.style.display = "block";
   };
 
-  // モーダルの×ボタン
   closeBtn.onclick = () => {
     modal.style.display = "none";
   };
 
-  // モーダル外クリックで閉じる
   window.onclick = (event) => {
     if (event.target === modal) {
       modal.style.display = "none";
     }
   };
 
-  // IR受信・登録ボタンが押されたとき
   document.getElementById("ir-recv-btn").onclick = () => {
     const name = document.getElementById("ir-name").value;
-    fetch("/register_ir/", {
+    fetch("/post_register_ir/", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -40,16 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   };
 
-  // 送信ボタンたちにイベント付与
   document.querySelectorAll(".send-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const id = btn.dataset.id; // data-id="IR1" などがHTMLに必要
+      const id = btn.dataset.id;
       sendSignal(id);
     });
   });
 
   function sendSignal(id) {
-    fetch("/send_ir/", {
+    fetch("/post_send_ir/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
