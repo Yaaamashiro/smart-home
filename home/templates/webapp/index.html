@@ -8,10 +8,13 @@
     <script src="{% static 'webapp/script.js' %}" defer></script>
   </head>
   <body>
+    <!-- CSRF トークン用（script.jsで取得） -->
     <form method="post" style="display: none">{% csrf_token %}</form>
 
+    <!-- IR 登録モーダル起動ボタン -->
     <button id="btn-register-ir">赤外線登録</button>
 
+    <!-- モーダル本体 -->
     <div id="ir-modal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -20,12 +23,13 @@
       </div>
     </div>
 
+    <!-- 信号一覧 -->
     <h3>登録済み赤外線信号一覧</h3>
     <ul id="signal-list">
       {% for signal in signals %}
       <li>
         {{ signal.name }}
-        <button class="send-btn" data-id="{{ signal.id }}">送信</button>
+        <button class="send-btn" data-id="{{ signal.name }}">送信</button>
       </li>
       {% empty %}
       <li>登録済みの信号はありません。</li>

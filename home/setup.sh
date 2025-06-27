@@ -58,6 +58,7 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 
 sudo docker compose up home-db home-app --build -d
 sudo docker compose exec home-app python manage.py migrate
+sudo docker compose exec home-app python manage.py collectstatic
 
 sudo docker compose exec home-app python manage.py shell -c "
 from django.contrib.auth import get_user_model;
