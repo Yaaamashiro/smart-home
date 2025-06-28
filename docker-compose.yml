@@ -4,6 +4,7 @@ services:
     container_name: home-db
     ports:
       - "5432:5432"
+    restart: unless-stopped
     volumes:
       - data:/var/lib/postgresql/data
     environment:
@@ -20,6 +21,7 @@ services:
       - "8000:8000"
     depends_on:
       - home-db
+    restart: unless-stopped
     devices:
       - "/dev/bus/usb:/dev/bus/usb"
     environment:
