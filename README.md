@@ -1,7 +1,8 @@
 # 開発環境
 
 - Raspberry Pi Zero 2 W
-- Ubuntu Server 24.04.2 LTS
+- Raspberry Pi Pico 2 W
+- Ubuntu Server 24.04.2 LTS (64-bit)
 - Docker 28.3.0
 - Python 3.12.10
 - Django 5.2.1
