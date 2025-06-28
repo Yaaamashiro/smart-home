@@ -1,13 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("ir-modal");
-  const closeBtn = document.querySelector(".close");
 
-  document.getElementById("btn-register-ir").onclick = () => {
+  document.getElementById("btn-ir-register").onclick = () => {
     modal.style.display = "block";
-  };
-
-  closeBtn.onclick = () => {
-    modal.style.display = "none";
   };
 
   window.onclick = (event) => {
@@ -16,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  document.getElementById("ir-recv-btn").onclick = () => {
+  document.getElementById("btn-ir-receive-register").onclick = () => {
     const name = document.getElementById("ir-name").value;
     fetch("/post_register_ir/", {
       method: "POST",
@@ -28,7 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        alert(data.status === "ok" ? "登録成功！" : `失敗：${data.message}`);
+        alert(
+          data.status === "ok"
+            ? "Successful register!"
+            : `ERROR：${data.message}`
+        );
         if (data.status === "ok") {
           modal.style.display = "none";
           location.reload();
@@ -36,29 +35,25 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   };
 
-  document.querySelectorAll(".send-btn").forEach((btn) => {
+  document.querySelectorAll(".btn-ir-send").forEach((btn) => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.id;
-      sendSignal(id);
+      fetch("/post_send_ir/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCsrfToken(),
+        },
+        body: JSON.stringify({ id: id }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status !== "ok") {
+            alert(`ERROR：${data.message}`);
+          }
+        });
     });
   });
-
-  function sendSignal(id) {
-    fetch("/post_send_ir/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCsrfToken(),
-      },
-      body: JSON.stringify({ id: id }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        alert(
-          data.status === "ok" ? "送信成功！" : `送信失敗：${data.message}`
-        );
-      });
-  }
 
   function getCsrfToken() {
     return document.querySelector("[name=csrfmiddlewaretoken]").value;

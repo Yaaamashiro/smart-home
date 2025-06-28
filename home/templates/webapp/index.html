@@ -3,32 +3,30 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>Home</title>
+    <title>HOME</title>
     <link rel="stylesheet" href="{% static 'webapp/style.css' %}" />
     <script src="{% static 'webapp/script.js' %}" defer></script>
   </head>
   <body>
     <form method="post" style="display: none">{% csrf_token %}</form>
 
-    <button id="btn-register-ir">赤外線登録</button>
+    <button id="btn-ir-register">REGISTER</button>
 
     <div id="ir-modal" class="modal">
       <div class="modal-content">
-        <span class="close">&times;</span>
-        <input id="ir-name" placeholder="IR信号名" />
-        <button id="ir-recv-btn">受信して登録</button>
+        <input id="ir-name" placeholder="Enter IR name" />
+        <button id="btn-ir-receive-register">RECEIVE & REGISTER</button>
       </div>
     </div>
 
-    <h3>登録済み赤外線信号一覧</h3>
-    <ul id="signal-list">
+    <ul id="ir-list">
       {% for signal in signals %}
       <li>
         {{ signal.name }}
-        <button class="send-btn" data-id="{{ signal.name }}">送信</button>
+        <button class="btn-ir-send" data-id="{{ signal.name }}">SEND</button>
       </li>
       {% empty %}
-      <li>登録済みの信号はありません。</li>
+      <li>No registered IR.</li>
       {% endfor %}
     </ul>
   </body>

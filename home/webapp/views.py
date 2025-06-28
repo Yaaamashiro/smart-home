@@ -10,10 +10,9 @@ def index(request):
     return render(request, 'webapp/index.html', {'signals': signals})
 
 def post_register_ir(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        result = register_ir(name)
-        return JsonResponse(result)
+    name = request.POST.get('name')
+    result = register_ir(name)
+    return JsonResponse(result)
 
 def post_send_ir(request):
     try:
