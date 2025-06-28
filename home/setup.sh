@@ -23,6 +23,8 @@ cd smart-home
 
 sudo touch .env
 sudo chown "$USER":"$USER" .env
+
+global_ip=[$(curl ifconfig.io)]
 read -p "DEBUG? (True or False): " debug
 read -p "Enter USERNAME: " username
 read -s -p "Enter PASSWORD: " password
@@ -32,7 +34,7 @@ cat <<EOF > .env
 DEBUG=$debug
 DJANGO_SECRET_KEY=$password
 DJANGO_LOGLEVEL=info
-DJANGO_ALLOWED_HOSTS=home
+DJANGO_ALLOWED_HOSTS=home,$global_ip
 DATABASE_ENGINE=postgresql_psycopg2
 DATABASE_NAME=postgre
 DATABASE_USERNAME=$username
@@ -57,8 +59,6 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 sudo docker compose up home-db home-app --build -d
-sudo docker compose exec home-app python manage.py migrate
-sudo docker compose exec home-app python manage.py collectstatic --noinput
 
 sudo docker compose exec home-app python manage.py shell -c "
 from django.contrib.auth import get_user_model;
