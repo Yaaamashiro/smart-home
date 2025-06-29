@@ -3,6 +3,10 @@ button {
   margin-top: 5px;
 }
 
+form {
+  display: inline;
+}
+
 input {
   width: 90%;
   margin-bottom: 10px;
@@ -34,3 +38,4 @@ ul {
   position: relative;
   text-align: center;
 }
+

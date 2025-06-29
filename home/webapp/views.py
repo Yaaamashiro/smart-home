@@ -1,7 +1,7 @@
 import json
 from .models import InfraredSignal, Lock
 from django.shortcuts import redirect, render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from webapp.utils.send_ir import send_ir
 from webapp.utils.register_ir import register_ir
@@ -41,3 +41,16 @@ def post_toggle_lock(request):
     lock.is_opened = not lock.is_opened
     lock.save()
     return redirect('index')
+
+def get_lock_is_opened(request):
+    lock = Lock.objects.first()
+    if lock is None:
+        return HttpResponse("unknown", status=404)
+    return HttpResponse("1" if lock.is_opened else "0")
+
+def get_lock_updated_at(request):
+    lock = Lock.objects.first()
+    if lock is None:
+        return HttpResponse("unknown", status=404)
+    return HttpResponse(str(lock.updated_at))
+
