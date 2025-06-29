@@ -24,7 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('post_register_ir/', views.post_register_ir, name='register_ir'),
-    path('post_send_ir/', views.post_send_ir, name='send_ir')
+    path('post_send_ir/', views.post_send_ir, name='send_ir'),
+    path('post_toggle_lock/', views.post_toggle_lock, name='toggle_lock')
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -19,6 +19,18 @@
       </div>
     </div>
 
+    <ul>
+      <li>
+        Lock
+        <form method="post" action="{% url 'post_toggle_lock' %}">
+          {% csrf_token %}
+          <button type="submit">
+            {% if lock.is_opened %}LOCK{% else %}OPEN{% endif %}
+          </button>
+        </form>
+      </li>
+    </ul>
+
     <ul id="ir-list">
       {% for signal in signals %}
       <li>
