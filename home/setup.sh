@@ -24,6 +24,7 @@ cd smart-home
 sudo touch .env
 sudo chown "$USER":"$USER" .env
 
+local_ip=$(ip -4 addr show wlan0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 global_ip=[$(curl ifconfig.io)]
 read -p "DEBUG? (True or False): " debug
 read -p "Enter USERNAME: " username
@@ -34,7 +35,7 @@ cat <<EOF > .env
 DEBUG=$debug
 DJANGO_SECRET_KEY=$password
 DJANGO_LOGLEVEL=info
-DJANGO_ALLOWED_HOSTS=home,$global_ip
+DJANGO_ALLOWED_HOSTS=home,$local_ip,$global_ip
 DATABASE_ENGINE=postgresql_psycopg2
 DATABASE_NAME=postgre
 DATABASE_USERNAME=$username
